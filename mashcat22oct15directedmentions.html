@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Mashcat October 22, 2015 - Authority Tweets</title>
+<script src="../assets/d3.v3.min.js"></script>
+<style type="text/css">
+
+div#sidebar {
+    position:fixed;
+    top:0px;
+    left:0px;
+    width: 250px;
+    height:400px;
+    overflow:scroll;
+
+    border: 1px solid black;
+    background: #eee;
+    padding: 5px;
+    }
+
+div#sidebar_lists {
+    font-size: 75%;
+}
+#sidebar_term {
+    clear: both;
+    }
+    
+#termselect {
+    width: 100%;
+}
+div.sidebar_list {
+    width: 50%;
+    float:left;
+}
+
+div#argsopts {
+    float: right;
+}
+div#metadata {
+    position: fixed;
+    top: 0;
+    right: 0;
+    border: 1px solid black;
+    background: #eee;
+    padding: 5px;
+}
+div.metadata {
+    font-size: 75%;
+}
+
+path.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+marker#plain {
+  fill: #666;
+}
+
+marker#in {
+  fill: #44f;
+}
+
+marker#out {
+  fill: #0f0;
+}
+
+path.link.hlOut {
+    stroke: #0f0;
+    stroke-width: 2px;
+}
+path.link.hlIn, path.link.hlUndirected {
+    stroke: #44f;
+    stroke-width: 2px;
+}
+
+
+circle {
+  fill: #eee;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+circle.hl {
+    stroke: #f00;
+    fill: #f00;
+}
+circle.hlIn, circle.hlUndirected.hlUndirected, circle.hlUndirected {
+    stroke: #0f0;
+    fill: #cfc;
+}
+circle.hlOut {
+    stroke: #66f;
+    fill: #ccf;
+}
+circle.hlout.hlIn {
+    stroke: #66f;
+    fill: #cfc;
+}
+
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+text.shad {
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-opacity: .8;
+}
+g.hl text.shad {
+    stroke: #fcc;
+      stroke-opacity: 1;
+}
+g.hlIn text.shad, g.hlUndirected text.shad {
+    stroke: #cfc;
+      stroke-opacity: 1;
+}
+g.hlOut text.shad {
+    stroke: #ddf;
+      stroke-opacity: 1;
+}
+
+
+ul { margin: 0; padding: 0; list-style-type: none;}
+    </style>
+  </head>
+  <body>
+  
+    <div id="sidebar">
+        <div id="sidebar_selectdiv"></div>
+        <h2 id="sidebar_term"></h2>
+        <div id="sidebar_lists">
+            <div class="sidebar_list" id="sidebar_inlist"></div>
+            <div class="sidebar_list" id="sidebar_outlist"></div>
+        </div>
+    </div>
+    <svg id="chart"></svg>
+    <div id="metadata"></div>
+  
+    <script type="text/javascript">
+    var data = {"profile": {"count": 549, "retweetcount": 176, "args": ["projects/mashcat22oct15/"], "usercount": 0, "earliest": "2015-10-14 16:40:14 UTC", "geocount": 0, "metadatafile": "projects/mashcat22oct15/metadata.json", "opts": {"graph": "directed", "field": "user", "mode": "mentions", "template": "graph.html", "threshold": 1, "output": "html"}, "latest": "2015-10-22 21:14:33 UTC"}, "nodes": [{"name": "wynne_susan", "title": "wynne_susan (15 tweets)"}, {"name": "slmcdanold", "title": "slmcdanold (3 tweets)"}, {"name": "cm_harlow", "title": "cm_harlow (139 tweets)"}, {"name": "gmcharlt", "title": "gmcharlt (35 tweets)"}, {"name": "no_reply", "title": "no_reply (24 tweets)"}, {"name": "ostephens", "title": "ostephens (1 tweet)"}, {"name": "orangeaurochs", "title": "orangeaurochs (1 tweet)"}, {"name": "yo_bj", "title": "yo_bj (7 tweets)"}, {"name": "librarywebchic", "title": "librarywebchic (3 tweets)"}, {"name": "jackflaps", "title": "jackflaps (24 tweets)"}, {"name": "sf433", "title": "sf433 (36 tweets)"}, {"name": "zemkat", "title": "zemkat (26 tweets)"}, {"name": "deans", "title": "deans (10 tweets)"}, {"name": "pendragon_dt", "title": "pendragon_dt (10 tweets)"}, {"name": "knanton", "title": "knanton (12 tweets)"}, {"name": "straikat", "title": "straikat (16 tweets)"}, {"name": "lukask", "title": "lukask (10 tweets)"}, {"name": "info_grrl", "title": "info_grrl (8 tweets)"}, {"name": "erinaleach", "title": "erinaleach (7 tweets)"}, {"name": "ryanwick", "title": "ryanwick (3 tweets)"}, {"name": "annaneat", "title": "annaneat (21 tweets)"}, {"name": "wendycr_", "title": "wendycr_ (12 tweets)"}, {"name": "metageeky", "title": "metageeky (6 tweets)"}, {"name": "vphill", "title": "vphill (1 tweet)"}, {"name": "CaptSolo", "title": "CaptSolo (1 tweet)"}, {"name": "start_words", "title": "start_words (12 tweets)"}, {"name": "k_grons", "title": "k_grons (1 tweet)"}, {"name": "jmyntti", "title": "jmyntti (0 tweets)"}, {"name": "sylvianursebc", "title": "sylvianursebc (2 tweets)"}, {"name": "alyssa_briggs", "title": "alyssa_briggs (12 tweets)"}, {"name": "johnmac38", "title": "johnmac38 (4 tweets)"}, {"name": "PublicSafetyNL", "title": "PublicSafetyNL (1 tweet)"}, {"name": "kwocontext", "title": "kwocontext (2 tweets)"}, {"name": "barnlib", "title": "barnlib (6 tweets)"}, {"name": "ORCID_Org", "title": "ORCID_Org (0 tweets)"}, {"name": "N7IRL", "title": "N7IRL (1 tweet)"}, {"name": "anarchivist", "title": "anarchivist (4 tweets)"}, {"name": "MetadataCatalog", "title": "MetadataCatalog (6 tweets)"}, {"name": "thisismmiller", "title": "thisismmiller (0 tweets)"}, {"name": "linkedjazz", "title": "linkedjazz (0 tweets)"}, {"name": "DPWayman", "title": "DPWayman (2 tweets)"}, {"name": "n_lemay", "title": "n_lemay (1 tweet)"}, {"name": "rowmyboat", "title": "rowmyboat (7 tweets)"}, {"name": "poliananana", "title": "poliananana (1 tweet)"}, {"name": "archivetype", "title": "archivetype (2 tweets)"}, {"name": "ruthbrarian", "title": "ruthbrarian (5 tweets)"}, {"name": "greenleeMichael", "title": "greenleeMichael (2 tweets)"}, {"name": "sangfroid_san", "title": "sangfroid_san (1 tweet)"}, {"name": "crafterslane", "title": "crafterslane (2 tweets)"}, {"name": "HydraSphere", "title": "HydraSphere (0 tweets)"}, {"name": "LAICMG", "title": "LAICMG (1 tweet)"}, {"name": "cat_lager", "title": "cat_lager (3 tweets)"}, {"name": "thisismariat", "title": "thisismariat (1 tweet)"}, {"name": "sarahjeong", "title": "sarahjeong (1 tweet)"}, {"name": "mjingle", "title": "mjingle (6 tweets)"}, {"name": "twithaca", "title": "twithaca (1 tweet)"}, {"name": "galvan_as", "title": "galvan_as (2 tweets)"}, {"name": "EthanDF", "title": "EthanDF (3 tweets)"}, {"name": "OpOnions", "title": "OpOnions (5 tweets)"}, {"name": "ekelistic", "title": "ekelistic (2 tweets)"}, {"name": "AnoushkaMcG", "title": "AnoushkaMcG (3 tweets)"}, {"name": "LibTechWomen", "title": "LibTechWomen (1 tweet)"}, {"name": "caschwartz", "title": "caschwartz (3 tweets)"}, {"name": "hellotechserv", "title": "hellotechserv (1 tweet)"}, {"name": "declan", "title": "declan (1 tweet)"}, {"name": "LAIonline", "title": "LAIonline (1 tweet)"}, {"name": "DJSurda", "title": "DJSurda (1 tweet)"}, {"name": "HearThisAt", "title": "HearThisAt (0 tweets)"}, {"name": "RazzmatazzClubs", "title": "RazzmatazzClubs (0 tweets)"}, {"name": "Mashcat", "title": "Mashcat (1 tweet)"}, {"name": "SpartanRace", "title": "SpartanRace (0 tweets)"}, {"name": "OPL_Tante", "title": "OPL_Tante (1 tweet)"}, {"name": "DST4L", "title": "DST4L (1 tweet)"}, {"name": "fsassumpcao", "title": "fsassumpcao (2 tweets)"}, {"name": "atomotic", "title": "atomotic (1 tweet)"}, {"name": "mattgschultz", "title": "mattgschultz (1 tweet)"}, {"name": "ablwr", "title": "ablwr (1 tweet)"}, {"name": "kiru", "title": "kiru (1 tweet)"}, {"name": "emilyrnlds", "title": "emilyrnlds (1 tweet)"}, {"name": "JuniorTidal", "title": "JuniorTidal (1 tweet)"}, {"name": "Peter_Diggs", "title": "Peter_Diggs (1 tweet)"}, {"name": "sehovde", "title": "sehovde (1 tweet)"}, {"name": "AlicePrael", "title": "AlicePrael (2 tweets)"}, {"name": "ces43", "title": "ces43 (1 tweet)"}, {"name": "StaceyJacques77", "title": "StaceyJacques77 (1 tweet)"}, {"name": "Mash_Cat", "title": "Mash_Cat (2 tweets)"}, {"name": "bibvaporvell", "title": "bibvaporvell (0 tweets)"}, {"name": "timathom", "title": "timathom (1 tweet)"}, {"name": "vmdbks", "title": "vmdbks (0 tweets)"}, {"name": "marccold", "title": "marccold (1 tweet)"}], "links": [{"source": 0, "target": 21, "value": 2}, {"source": 0, "target": 10, "value": 1}, {"source": 0, "target": 0, "value": 2}, {"source": 0, "target": 2, "value": 4}, {"source": 0, "target": 3, "value": 2}, {"source": 0, "target": 11, "value": 2}, {"source": 0, "target": 1, "value": 1}, {"source": 0, "target": 15, "value": 1}, {"source": 1, "target": 2, "value": 2}, {"source": 2, "target": 20, "value": 2}, {"source": 2, "target": 5, "value": 2}, {"source": 2, "target": 10, "value": 18}, {"source": 2, "target": 9, "value": 2}, {"source": 2, "target": 11, "value": 8}, {"source": 2, "target": 0, "value": 1}, {"source": 2, "target": 4, "value": 17}, {"source": 2, "target": 38, "value": 1}, {"source": 2, "target": 13, "value": 4}, {"source": 2, "target": 25, "value": 2}, {"source": 2, "target": 3, "value": 7}, {"source": 2, "target": 30, "value": 3}, {"source": 2, "target": 15, "value": 3}, {"source": 2, "target": 19, "value": 1}, {"source": 2, "target": 22, "value": 1}, {"source": 2, "target": 23, "value": 1}, {"source": 2, "target": 21, "value": 3}, {"source": 2, "target": 27, "value": 1}, {"source": 2, "target": 2, "value": 6}, {"source": 2, "target": 16, "value": 6}, {"source": 2, "target": 17, "value": 2}, {"source": 2, "target": 29, "value": 4}, {"source": 2, "target": 6, "value": 2}, {"source": 2, "target": 39, "value": 1}, {"source": 2, "target": 18, "value": 4}, {"source": 2, "target": 12, "value": 1}, {"source": 2, "target": 1, "value": 2}, {"source": 2, "target": 14, "value": 4}, {"source": 2, "target": 36, "value": 1}, {"source": 2, "target": 8, "value": 5}, {"source": 3, "target": 4, "value": 3}, {"source": 3, "target": 10, "value": 3}, {"source": 3, "target": 25, "value": 1}, {"source": 3, "target": 2, "value": 14}, {"source": 3, "target": 11, "value": 1}, {"source": 3, "target": 1, "value": 1}, {"source": 3, "target": 15, "value": 2}, {"source": 3, "target": 14, "value": 1}, {"source": 3, "target": 29, "value": 2}, {"source": 4, "target": 21, "value": 1}, {"source": 4, "target": 11, "value": 1}, {"source": 4, "target": 2, "value": 2}, {"source": 4, "target": 3, "value": 2}, {"source": 4, "target": 7, "value": 1}, {"source": 4, "target": 20, "value": 1}, {"source": 4, "target": 0, "value": 1}, {"source": 4, "target": 14, "value": 1}, {"source": 4, "target": 36, "value": 1}, {"source": 4, "target": 8, "value": 4}, {"source": 4, "target": 16, "value": 1}, {"source": 6, "target": 2, "value": 1}, {"source": 6, "target": 3, "value": 1}, {"source": 6, "target": 10, "value": 1}, {"source": 7, "target": 2, "value": 4}, {"source": 7, "target": 3, "value": 2}, {"source": 7, "target": 10, "value": 3}, {"source": 8, "target": 4, "value": 3}, {"source": 9, "target": 4, "value": 3}, {"source": 9, "target": 10, "value": 1}, {"source": 9, "target": 13, "value": 1}, {"source": 9, "target": 2, "value": 2}, {"source": 9, "target": 18, "value": 1}, {"source": 9, "target": 36, "value": 1}, {"source": 10, "target": 4, "value": 8}, {"source": 10, "target": 10, "value": 4}, {"source": 10, "target": 2, "value": 19}, {"source": 10, "target": 16, "value": 1}, {"source": 10, "target": 11, "value": 1}, {"source": 10, "target": 0, "value": 1}, {"source": 10, "target": 14, "value": 1}, {"source": 10, "target": 18, "value": 1}, {"source": 11, "target": 4, "value": 2}, {"source": 11, "target": 34, "value": 1}, {"source": 11, "target": 10, "value": 2}, {"source": 11, "target": 2, "value": 3}, {"source": 11, "target": 16, "value": 1}, {"source": 11, "target": 30, "value": 1}, {"source": 11, "target": 15, "value": 1}, {"source": 11, "target": 17, "value": 1}, {"source": 11, "target": 18, "value": 1}, {"source": 12, "target": 13, "value": 1}, {"source": 13, "target": 49, "value": 1}, {"source": 13, "target": 4, "value": 2}, {"source": 14, "target": 2, "value": 4}, {"source": 14, "target": 16, "value": 3}, {"source": 14, "target": 10, "value": 3}, {"source": 15, "target": 10, "value": 1}, {"source": 15, "target": 2, "value": 4}, {"source": 15, "target": 3, "value": 2}, {"source": 15, "target": 15, "value": 1}, {"source": 15, "target": 29, "value": 3}, {"source": 15, "target": 18, "value": 1}, {"source": 16, "target": 14, "value": 1}, {"source": 16, "target": 2, "value": 2}, {"source": 16, "target": 4, "value": 2}, {"source": 17, "target": 21, "value": 1}, {"source": 17, "target": 4, "value": 1}, {"source": 17, "target": 34, "value": 1}, {"source": 17, "target": 2, "value": 1}, {"source": 17, "target": 11, "value": 2}, {"source": 17, "target": 30, "value": 1}, {"source": 17, "target": 0, "value": 1}, {"source": 17, "target": 18, "value": 2}, {"source": 18, "target": 11, "value": 1}, {"source": 20, "target": 27, "value": 1}, {"source": 20, "target": 2, "value": 8}, {"source": 20, "target": 4, "value": 6}, {"source": 20, "target": 10, "value": 2}, {"source": 20, "target": 18, "value": 1}, {"source": 21, "target": 4, "value": 2}, {"source": 21, "target": 12, "value": 3}, {"source": 21, "target": 34, "value": 1}, {"source": 21, "target": 11, "value": 4}, {"source": 21, "target": 0, "value": 3}, {"source": 21, "target": 17, "value": 1}, {"source": 21, "target": 29, "value": 1}, {"source": 22, "target": 11, "value": 2}, {"source": 22, "target": 18, "value": 2}, {"source": 22, "target": 88, "value": 1}, {"source": 24, "target": 16, "value": 1}, {"source": 25, "target": 17, "value": 1}, {"source": 25, "target": 2, "value": 4}, {"source": 25, "target": 10, "value": 2}, {"source": 25, "target": 11, "value": 1}, {"source": 25, "target": 37, "value": 1}, {"source": 26, "target": 2, "value": 1}, {"source": 28, "target": 17, "value": 1}, {"source": 28, "target": 11, "value": 1}, {"source": 29, "target": 0, "value": 1}, {"source": 29, "target": 2, "value": 4}, {"source": 29, "target": 29, "value": 1}, {"source": 29, "target": 10, "value": 1}, {"source": 29, "target": 37, "value": 1}, {"source": 30, "target": 50, "value": 1}, {"source": 31, "target": 11, "value": 1}, {"source": 33, "target": 2, "value": 1}, {"source": 33, "target": 10, "value": 1}, {"source": 33, "target": 20, "value": 1}, {"source": 35, "target": 36, "value": 1}, {"source": 37, "target": 14, "value": 1}, {"source": 37, "target": 2, "value": 2}, {"source": 37, "target": 10, "value": 1}, {"source": 41, "target": 2, "value": 1}, {"source": 43, "target": 36, "value": 1}, {"source": 45, "target": 36, "value": 1}, {"source": 47, "target": 36, "value": 1}, {"source": 51, "target": 2, "value": 1}, {"source": 51, "target": 10, "value": 1}, {"source": 52, "target": 36, "value": 1}, {"source": 53, "target": 36, "value": 1}, {"source": 54, "target": 2, "value": 5}, {"source": 54, "target": 3, "value": 1}, {"source": 54, "target": 10, "value": 2}, {"source": 55, "target": 10, "value": 1}, {"source": 57, "target": 2, "value": 1}, {"source": 58, "target": 3, "value": 1}, {"source": 58, "target": 2, "value": 1}, {"source": 58, "target": 59, "value": 1}, {"source": 58, "target": 7, "value": 1}, {"source": 58, "target": 10, "value": 1}, {"source": 59, "target": 3, "value": 1}, {"source": 60, "target": 2, "value": 1}, {"source": 60, "target": 3, "value": 1}, {"source": 60, "target": 10, "value": 1}, {"source": 60, "target": 7, "value": 1}, {"source": 61, "target": 3, "value": 1}, {"source": 62, "target": 2, "value": 1}, {"source": 62, "target": 3, "value": 1}, {"source": 62, "target": 10, "value": 1}, {"source": 63, "target": 2, "value": 1}, {"source": 63, "target": 10, "value": 1}, {"source": 64, "target": 2, "value": 1}, {"source": 64, "target": 10, "value": 1}, {"source": 65, "target": 50, "value": 1}, {"source": 66, "target": 68, "value": 1}, {"source": 66, "target": 67, "value": 1}, {"source": 66, "target": 69, "value": 1}, {"source": 69, "target": 70, "value": 1}, {"source": 71, "target": 7, "value": 1}, {"source": 72, "target": 7, "value": 1}, {"source": 73, "target": 2, "value": 1}, {"source": 73, "target": 3, "value": 1}, {"source": 73, "target": 10, "value": 1}, {"source": 73, "target": 7, "value": 1}, {"source": 74, "target": 7, "value": 1}, {"source": 75, "target": 7, "value": 1}, {"source": 76, "target": 7, "value": 1}, {"source": 77, "target": 7, "value": 1}, {"source": 78, "target": 7, "value": 1}, {"source": 79, "target": 7, "value": 1}, {"source": 80, "target": 7, "value": 1}, {"source": 81, "target": 2, "value": 1}, {"source": 81, "target": 10, "value": 1}, {"source": 82, "target": 2, "value": 2}, {"source": 82, "target": 10, "value": 1}, {"source": 83, "target": 2, "value": 1}, {"source": 83, "target": 10, "value": 1}, {"source": 84, "target": 69, "value": 1}, {"source": 85, "target": 86, "value": 1}, {"source": 85, "target": 68, "value": 1}, {"source": 87, "target": 5, "value": 1}, {"source": 87, "target": 88, "value": 1}, {"source": 89, "target": 22, "value": 1}], "metadata": {"search": "mashcat", "creator": "Christina Harlow", "title": "Mashcat October 22, 2015 - Authority Tweets"}};
+    var metadata = data.metadata;
+    var profile = data.profile;
+    var opts = profile.opts;
+    
+    var mode = opts["mode"];
+    var threshold = opts["threshold"];
+    var graph = opts["graph"];
+    var field = opts["field"];
+    var links = data["links"];
+    var nodes = data["nodes"];
+    
+
+    html = "<strong>" + metadata["title"] + "</strong> | Search: " + metadata["search"];
+        html += " | Threshold: " + threshold;
+        if (mode) html += " | Mode: " + mode;
+        html += "<br/>";
+    html += profile.count + " tweets from " + profile.usercount + " users, including " + profile.retweetcount + " retweets (" + (profile.retweetcount / profile.count * 100).toFixed(2) + "%), "
+    html += "and " + profile.geocount + " with geo (" + (profile.geocount / profile.count * 100).toFixed(2) + "%): "
+    html += profile.earliest + " to " + profile.latest
+    d3.select("#metadata").html(html);
+
+    
+    switch (field) {
+        case "user": twitterlinkroot = "https://twitter.com/";
+            break;
+        case "hashtag": twitterlinkroot = "https://twitter.com/hashtag/";
+            break;
+    }
+    
+    // in directed graph we want different styles for in and out links, but
+    // in undirected they should be the same.
+    var inLinkClass = (graph == 'directed') ? "In" : "Undirected";
+    var outLinkClass = (graph == 'directed') ? "Out" : "Undirected";
+    
+    // hide the outlink div if this is an undirected graph
+    if (graph == 'undirected')
+         d3.select("#sidebar_outlist").remove();
+    
+    function twitterlink(n) {
+        return "<a href='" + twitterlinkroot + n + "'>" + n + "</n>";
+    }
+    
+    function selectlink(n) {
+        return "<a href='javascript:termselect(\"" + n + "\")'>" + n + "</n>";
+    }
+    
+    function listsort(l) {
+        sortl = [];
+        for (var a = 0; a < l.length; a++) {
+            sortl.push(l[a].toLowerCase() + " " + l[a]);
+        }
+        sortl = sortl.sort();
+        for (var a = 0; a < sortl.length; a++) {
+            sortl[a] = sortl[a].split(" ")[1];
+        }
+        return sortl;
+    }
+    
+    function listhtml(l) {
+        l = listsort(l);
+        var html = "<ul>";
+        for (var a = 0; a < l.length; a++) {
+            html += "<li>" + selectlink(l[a]) + "</li>";
+        }
+        html += "</ul>";
+        return html;
+    }
+    
+    function selecthtml(l) {
+        l = listsort(l);
+        html = "<select id='termselect' onchange='termselect(this.value)'>";
+        for (var a = 0; a < l.length; a++) {
+            html += "<option>" + l[a] + "</option>";
+        }
+        html += "</select>";
+        return html;
+    }
+    
+    function termselect(name) {
+           // working with:
+       //    this:
+       //    <circle class="" transform="translate(974.0229211897631,951.403518091633)" id="circle_RobertCBinkley" r="6">
+    //     <title>RobertCBinkley (1/1)</title>
+    //  </circle>
+    //  d:
+    //  {"name": "RobertCBinkley", "title": "RobertCBinkley (1/1)"}
+    //  path:
+    //        <path d="M952.2..." marker-end="url(#plain)" in="pabinkley" out="RobertCBinkley" 
+    //            class="link suit out_RobertCBinkley in_pabinkley hlOut"/>
+         
+           root = d3.select("#circle_" + name);
+           // show selected term in sidebar
+           d3.select("#sidebar_term").html(twitterlink(name));
+
+           
+           pathsfg = d3.select("#paths-fg");
+           circlesfg = d3.select("#circles-fg");
+           textsfg = d3.select("#texts-fg");
+           paths = d3.select("#paths");
+           circles = d3.select("#circles");
+           texts = d3.select("#texts");
+           
+           // clear previous selections
+           d3.selectAll(".hl").classed("hl", false);
+           d3.selectAll(".hl"+inLinkClass).classed("hl"+inLinkClass, false);
+           d3.selectAll(".hl"+outLinkClass).classed("hl"+outLinkClass, false);
+           // put foregrounded paths etc. (if any) back in background
+           var p = pathsfg.selectAll("path");
+           // add arrowheads if directed graph
+           if (graph == 'directed') 
+               p.attr("marker-end", "url(#plain)");
+           if (p.size() > 0)
+               d3.select("#paths").each(function() {
+                   f = this;
+                   p.each(function() { 
+                       f.appendChild(this) 
+                   });
+            })
+           var p = circlesfg.selectAll("circle");
+           if (p.size() > 0)
+               d3.select("#circles").each(function() {
+                   f = this;
+                   p.each(function() { 
+                       f.appendChild(this) 
+                   });
+            })
+           var p = textsfg.selectAll("g");
+           if (p.size() > 0)
+               d3.select("#texts").each(function() {
+                   f = this;
+                   p.each(function() { 
+                       f.appendChild(this) 
+                   });
+            })
+           
+        // highlight current node, paths, branch nodes
+           root.classed("hl", true);
+           d3.select("#text_" + name).classed("hl", true);
+           // highlight paths
+           var inlist = [];
+           var outlist = [];
+           var alllist = {}; // may have to handle duplicates, from in and out lists
+           p = d3.selectAll("path.out_" + name).classed("hl"+outLinkClass, true);
+           if (graph == 'directed')
+               p.attr("marker-end", "url(#out)")
+            p.each(function(d){
+               if (d.target.name != name) {
+                   if (graph == 'directed')
+                       outlist.push(d.target.name);
+                   else
+                       alllist[d.target.name] = true;
+                   d3.select("#circle_" + d.target.name).classed("hl"+inLinkClass, true); 
+                   d3.select("#text_" + d.target.name).classed("hl"+inLinkClass, true);
+               };
+           });
+           p = d3.selectAll("path.in_" + name).classed("hl"+inLinkClass, true);
+           if (graph == 'directed')
+               p.attr("marker-end", "url(#in)");
+           p.each(function(d){
+               if (d.source.name != name) {
+                   if (graph == 'directed')
+                       inlist.push(d.source.name);
+                   else
+                       alllist[d.source.name] = true;
+                   d3.select("#circle_" + d.source.name).classed("hl"+outLinkClass, true); 
+                   d3.select("#text_" + d.source.name).classed("hl"+outLinkClass, true);
+                   if (graph == 'directed')
+                       this["marker-end"] = "url(#out)";
+               };
+           });
+        var inlabel = {"retweets": "Retweeted by", "replies": "Replies to this", "mentions": "Mentioned"};
+        var outlabel = {"retweets": "Retweeted", "replies": "Replies from this", "mentions": "Mentioned by"};
+        if (graph == 'directed') {
+            d3.select("#sidebar_inlist").html("<h3>" + inlabel[mode] + "</h3>" + listhtml(inlist));
+            d3.select("#sidebar_outlist").html("<h3>" + outlabel[mode] + "</h3>" + listhtml(outlist));
+        }
+        else
+            d3.select("#sidebar_inlist").html("<h3>Co-Tags</h3>" + listhtml(Object.keys(alllist).sort()));
+
+        // move path to a different group: based on https://groups.google.com/forum/#!topic/d3-js/KEiqiUPZHUs
+           var p = paths.selectAll("path.out_" + name +", path.in_" + name);
+           if (p.size() > 0)
+               d3.select("#paths-fg").each(function() {
+                   f = this;
+                   p.each(function() { 
+                       f.appendChild(this) 
+                   });
+            })
+           var p = circles.selectAll(".hl, .hlIn, .hlOut, .hlUndirected");
+           if (p.size() > 0)
+               d3.select("#circles-fg").each(function() {
+                   f = this;
+                   p.each(function() { 
+                       f.appendChild(this) 
+                   });
+            })
+           var p = texts.selectAll(".hl, .hlIn, .hlOut, .hlUndirected");
+           if (p.size() > 0)
+               d3.select("#texts-fg").each(function() {
+                   f = this;
+                   p.each(function() { 
+                       f.appendChild(this) 
+                   });
+            })
+
+
+    }
+    
+
+// set box size to window size
+var win = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName('body')[0]
+
+// prepare list of terms for dropdown
+var terms = [];
+for (var a = 0; a < nodes.length; a++) {
+    terms.push(nodes[a]["name"]);
+}
+
+d3.select("#sidebar_selectdiv").html(selecthtml(terms));
+    
+// get viewport dimensions
+var portw = win.innerWidth || e.clientWidth || g.clientWidth,
+    porth = win.innerHeight|| e.clientHeight|| g.clientHeight;
+
+// make the svg really really big
+w = 2000;
+h = 2000;
+
+// but we'll want to scroll so that it is centred
+scrollx = (w >= portw) ? Math.round((w - portw)/2) : 0;
+scrolly = (h >= porth) ? Math.round((h - porth)/2) : 0;
+
+var force = d3.layout.force()
+    .nodes(d3.values(nodes))
+    .links(links)
+    .size([w, h])
+    .linkDistance(60)
+    .charge(-300)
+    .on("tick", tick)
+    .start();
+
+var svg = d3.select("#chart")
+    .attr("width", w)
+    .attr("height", h);
+
+// Per-type markers, as they don't inherit styles.
+svg.append("svg:defs").selectAll("marker")
+    .data(["plain", "in", "out"])
+  .enter().append("svg:marker")
+    .attr("id", String)
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 15)
+    .attr("refY", -1.5)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto")
+  .append("svg:path")
+    .attr("d", "M0,-5L10,0L0,5");
+
+var path = svg.append("svg:g")
+    .attr("id", "paths")
+  .selectAll("path")
+    .data(force.links())
+  .enter().append("svg:path")
+    .attr("class", function(d) { return "link " + d.type + " out_" + d.source.name + " in_" + d.target.name; })
+    .attr("out", function(d) { return d.source.name; })
+    .attr("in", function(d) { return d.target.name; });
+// add arrowheads if directed graph
+if (graph == 'directed')
+    path.attr("marker-end", "url(#plain)");
+
+var circle = svg.append("svg:g")
+    .attr("id", "circles")
+    .selectAll("circle")
+    .data(force.nodes())
+  .enter().append("svg:circle")
+    .attr("r", 6)
+    .attr("id", function(d) {return "circle_" + d.name;})
+   .on("click", function(d) {
+        termselect(d.name);
+           })
+   .call(force.drag);
+
+// tooltips
+ circle.append("title")
+      .text(function(d) { return d.title; });
+
+var text = svg.append("svg:g")
+    .attr("id", "texts")
+    .selectAll("g")
+    .data(force.nodes())
+  .enter().append("svg:g")
+  .attr("id", function(d) {return "text_" + d.name;});
+
+// A copy of the text with a thick white stroke for legibility.
+text.append("svg:text")
+    .attr("x", 8)
+    .attr("y", ".31em")
+    .attr("class", "shad")
+    
+    .text(function(d) { return d.name; });
+
+text.append("svg:text")
+    .attr("x", 8)
+    .attr("y", ".31em")
+    .text(function(d) { return d.name; });
+
+// foreground groups: we move highlighted objects here, to bring them in front of the rest
+var pathsfg = svg.append("svg:g")
+    .attr("id", "paths-fg");
+var circlesfg = svg.append("svg:g")
+    .attr("id", "circles-fg");
+var textsfg = svg.append("svg:g")
+    .attr("id", "texts-fg");
+
+// Use elliptical arc path segments to doubly-encode directionality.
+function tick() {
+  path.attr("d", function(d) {
+    var dx = d.target.x - d.source.x,
+        dy = d.target.y - d.source.y,
+        dr = Math.sqrt(dx * dx + dy * dy);
+    return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+  });
+
+  circle.attr("transform", function(d) {
+    return "translate(" + d.x + "," + d.y + ")";
+  });
+
+  text.attr("transform", function(d) {
+    return "translate(" + d.x + "," + d.y + ")";
+  });
+}
+//    });
+
+window.scrollTo(scrollx, scrolly);
+</script>
+</body>
+
+None

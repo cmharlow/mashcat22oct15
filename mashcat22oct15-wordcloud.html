@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+  <script src="../assets/d3.v3.min.js"></script>
+  <script src="../assets/d3.layout.cloud.js"></script>
+  <style>
+  .label {
+  font: 48px "Helvetica Neue";
+  fill: #ddd;
+}
+</style>
+  <script>
+
+//Simple animated example of d3-cloud - https://github.com/jasondavies/d3-cloud
+//Based on https://github.com/jasondavies/d3-cloud/blob/master/examples/simple.html
+
+var w = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName('body')[0],
+    width = w.innerWidth || e.clientWidth || g.clientWidth,
+    height = w.innerHeight|| e.clientHeight|| g.clientHeight,
+    currentlabel = "";
+
+var data = {"profile": {"args": ["projects/mashcat22oct15/"], "metadatafile": "projects/mashcat22oct15/metadata.json", "earliest": "2015-10-14 16:40:14 UTC", "count": 549, "retweetcount": 176, "end": "None", "geocount": 0, "start": "None", "latest": "2015-10-22 21:14:33 UTC", "opts": {"end": null, "intervalLabel": "1 hour", "maxwords": 25, "format": "%Y-%m-%d %H", "interval": 3600000, "timezone": "", "start": null, "template": "wordcloud.html", "intervalStr": "1H", "output": "html"}, "usercount": 80}, "values": [{"words": [{"count": 1, "text": "fotos"}, {"count": 1, "text": "quien"}, {"count": 1, "text": "habr"}, {"count": 1, "text": "subidas"}, {"count": 1, "text": "del"}, {"count": 1, "text": "sido"}, {"count": 1, "text": "ganad"}, {"count": 1, "text": "las"}], "name": "2015-10-14 16", "value": 1}, {"words": [{"count": 2, "text": "short"}, {"count": 2, "text": "mashcat"}, {"count": 2, "text": "title"}, {"count": 2, "text": "headed"}, {"count": 2, "text": "proposal"}, {"count": 2, "text": "monsters"}], "name": "2015-10-14 22", "value": 2}, {"words": [{"count": 1, "text": "good"}, {"count": 1, "text": "mashcat"}, {"count": 1, "text": "working"}, {"count": 1, "text": "pacific"}, {"count": 1, "text": "coast"}, {"count": 1, "text": "early"}, {"count": 1, "text": "going"}, {"count": 1, "text": "sleep"}, {"count": 1, "text": "bed"}, {"count": 1, "text": "proposal"}], "name": "2015-10-15 03", "value": 1}, {"words": [{"count": 1, "text": "podcast"}, {"count": 1, "text": "folk"}, {"count": 1, "text": "interest"}], "name": "2015-10-15 15", "value": 1}, {"words": [{"count": 1, "text": "project"}, {"count": 1, "text": "sounds"}, {"count": 1, "text": "interested"}, {"count": 1, "text": "well"}, {"count": 1, "text": "great"}], "name": "2015-10-15 16", "value": 1}, {"words": [{"count": 1, "text": "ritme"}, {"count": 1, "text": "tornar"}, {"count": 1, "text": "d'un"}, {"count": 1, "text": "aquest"}, {"count": 1, "text": "vespre"}, {"count": 1, "text": "tancar"}], "name": "2015-10-16 17", "value": 1}, {"words": [{"count": 1, "text": "tickets"}, {"count": 1, "text": "glad"}], "name": "2015-10-18 07", "value": 1}, {"words": [{"count": 3, "text": "event"}, {"count": 3, "text": "poke"}, {"count": 3, "text": "f2f"}, {"count": 3, "text": "hear"}, {"count": 3, "text": "boston"}, {"count": 3, "text": "proposals"}, {"count": 3, "text": "session"}, {"count": 3, "text": "putting"}, {"count": 2, "text": "utc"}, {"count": 2, "text": "idea"}, {"count": 2, "text": "thurs"}, {"count": 2, "text": "add"}, {"count": 2, "text": "chat"}, {"count": 2, "text": "authorities"}, {"count": 2, "text": "changing"}, {"count": 2, "text": "oct"}], "name": "2015-10-18 15", "value": 5}, {"words": [{"count": 2, "text": "utc"}, {"count": 2, "text": "idea"}, {"count": 2, "text": "thurs"}, {"count": 2, "text": "add"}, {"count": 2, "text": "chat"}, {"count": 2, "text": "authorities"}, {"count": 2, "text": "changing"}, {"count": 2, "text": "oct"}], "name": "2015-10-18 16", "value": 2}, {"words": [{"count": 3, "text": "utc"}, {"count": 3, "text": "idea"}, {"count": 3, "text": "thurs"}, {"count": 3, "text": "add"}, {"count": 3, "text": "chat"}, {"count": 3, "text": "authorities"}, {"count": 3, "text": "changing"}, {"count": 3, "text": "oct"}, {"count": 1, "text": "event"}, {"count": 1, "text": "poke"}, {"count": 1, "text": "f2f"}, {"count": 1, "text": "hear"}, {"count": 1, "text": "boston"}, {"count": 1, "text": "proposals"}, {"count": 1, "text": "session"}, {"count": 1, "text": "putting"}], "name": "2015-10-18 17", "value": 4}, {"words": [{"count": 1, "text": "utc"}, {"count": 1, "text": "idea"}, {"count": 1, "text": "thurs"}, {"count": 1, "text": "add"}, {"count": 1, "text": "chat"}, {"count": 1, "text": "authorities"}, {"count": 1, "text": "changing"}, {"count": 1, "text": "oct"}], "name": "2015-10-18 19", "value": 1}, {"words": [{"count": 3, "text": "utc"}, {"count": 3, "text": "idea"}, {"count": 3, "text": "thurs"}, {"count": 3, "text": "add"}, {"count": 3, "text": "chat"}, {"count": 3, "text": "authorities"}, {"count": 3, "text": "changing"}, {"count": 3, "text": "oct"}], "name": "2015-10-19 15", "value": 3}, {"words": [{"count": 1, "text": "utc"}, {"count": 1, "text": "idea"}, {"count": 1, "text": "thurs"}, {"count": 1, "text": "add"}, {"count": 1, "text": "chat"}, {"count": 1, "text": "authorities"}, {"count": 1, "text": "changing"}, {"count": 1, "text": "oct"}], "name": "2015-10-19 16", "value": 1}, {"words": [{"count": 6, "text": "journal"}, {"count": 6, "text": "data"}], "name": "2015-10-20 13", "value": 6}, {"words": [{"count": 2, "text": "journal"}, {"count": 2, "text": "data"}], "name": "2015-10-20 14", "value": 2}, {"words": [{"count": 1, "text": "utc"}, {"count": 1, "text": "journal"}, {"count": 1, "text": "idea"}, {"count": 1, "text": "thurs"}, {"count": 1, "text": "add"}, {"count": 1, "text": "chat"}, {"count": 1, "text": "authorities"}, {"count": 1, "text": "changing"}, {"count": 1, "text": "data"}, {"count": 1, "text": "oct"}], "name": "2015-10-20 16", "value": 2}, {"words": [{"count": 2, "text": "group"}, {"count": 2, "text": "calculator"}, {"count": 2, "text": "tcmmf"}, {"count": 2, "text": "redesign"}, {"count": 2, "text": "cataloging"}], "name": "2015-10-20 19", "value": 2}, {"words": [{"count": 4, "text": "utc"}, {"count": 4, "text": "questions"}, {"count": 4, "text": "chat"}, {"count": 4, "text": "hosted"}, {"count": 4, "text": "authorities"}, {"count": 4, "text": "tomorrow"}, {"count": 1, "text": "group"}, {"count": 1, "text": "cataloging"}, {"count": 1, "text": "calculator"}, {"count": 1, "text": "tcmmf"}, {"count": 1, "text": "redesign"}], "name": "2015-10-21 13", "value": 5}, {"words": [{"count": 2, "text": "journal"}, {"count": 2, "text": "data"}, {"count": 1, "text": "utc"}, {"count": 1, "text": "questions"}, {"count": 1, "text": "chat"}, {"count": 1, "text": "hosted"}, {"count": 1, "text": "authorities"}, {"count": 1, "text": "tomorrow"}], "name": "2015-10-21 14", "value": 3}, {"words": [{"count": 1, "text": "sending"}, {"count": 1, "text": "questions"}, {"count": 1, "text": "list"}, {"count": 1, "text": "halloween"}, {"count": 1, "text": "game"}, {"count": 1, "text": "link"}, {"count": 1, "text": "choosing"}, {"count": 1, "text": "address"}, {"count": 1, "text": "authorities"}, {"count": 1, "text": "document"}], "name": "2015-10-21 20", "value": 2}, {"words": [{"count": 1, "text": "ponder"}, {"count": 1, "text": "good"}, {"count": 1, "text": "discussion"}, {"count": 1, "text": "tonight"}, {"count": 1, "text": "questions"}, {"count": 1, "text": "authorities"}], "name": "2015-10-22 09", "value": 1}, {"words": [{"count": 1, "text": "top5"}, {"count": 1, "text": "menos"}, {"count": 1, "text": "situa"}], "name": "2015-10-22 11", "value": 1}, {"words": [{"count": 8, "text": "questions"}, {"count": 8, "text": "authorities"}, {"count": 7, "text": "utc"}, {"count": 7, "text": "eastern"}, {"count": 7, "text": "hey"}, {"count": 7, "text": "chat"}, {"count": 7, "text": "hosted"}, {"count": 7, "text": "today"}, {"count": 1, "text": "ponder"}, {"count": 1, "text": "good"}, {"count": 1, "text": "discussion"}, {"count": 1, "text": "tonight"}], "name": "2015-10-22 14", "value": 8}, {"words": [{"count": 1, "text": "reliable"}, {"count": 1, "text": "phone"}, {"count": 1, "text": "train"}, {"count": 1, "text": "connected"}, {"count": 1, "text": "follow"}, {"count": 1, "text": "today"}], "name": "2015-10-22 16", "value": 1}, {"words": [{"count": 1, "text": "utc"}, {"count": 1, "text": "questions"}, {"count": 1, "text": "eastern"}, {"count": 1, "text": "hey"}, {"count": 1, "text": "chat"}, {"count": 1, "text": "hosted"}, {"count": 1, "text": "authorities"}, {"count": 1, "text": "today"}], "name": "2015-10-22 18", "value": 1}, {"words": [{"count": 11, "text": "chat"}, {"count": 10, "text": "authorities"}, {"count": 10, "text": "minutes"}, {"count": 8, "text": "questions"}, {"count": 6, "text": "starts"}, {"count": 6, "text": "future"}, {"count": 4, "text": "hey"}, {"count": 4, "text": "forward"}, {"count": 3, "text": "navigator"}, {"count": 3, "text": "min"}, {"count": 3, "text": "wonderful"}, {"count": 3, "text": "coffee"}, {"count": 3, "text": "leaving"}, {"count": 3, "text": "mtg"}, {"count": 2, "text": "counting"}, {"count": 2, "text": "chatting"}, {"count": 2, "text": "storify"}, {"count": 2, "text": "meeting"}, {"count": 2, "text": "started"}, {"count": 2, "text": "going"}, {"count": 2, "text": "guys"}, {"count": 2, "text": "fewer"}, {"count": 1, "text": "sad"}, {"count": 1, "text": "topic"}, {"count": 1, "text": "hosted"}], "name": "2015-10-22 19", "value": 19}, {"words": [{"count": 88, "text": "authority"}, {"count": 75, "text": "authorities"}, {"count": 40, "text": "work"}, {"count": 38, "text": "data"}, {"count": 29, "text": "trust"}, {"count": 25, "text": "disambiguation"}, {"count": 24, "text": "metadata"}, {"count": 22, "text": "names"}, {"count": 22, "text": "marc"}, {"count": 21, "text": "control"}, {"count": 19, "text": "records"}, {"count": 19, "text": "local"}, {"count": 19, "text": "library"}, {"count": 18, "text": "collocation"}, {"count": 18, "text": "source"}, {"count": 17, "text": "people"}, {"count": 16, "text": "uris"}, {"count": 16, "text": "digital"}, {"count": 15, "text": "lod"}, {"count": 15, "text": "lot"}, {"count": 14, "text": "systems"}, {"count": 14, "text": "entities"}, {"count": 14, "text": "question"}, {"count": 13, "text": "change"}, {"count": 13, "text": "open"}], "name": "2015-10-22 20", "value": 443}, {"words": [{"count": 4, "text": "add"}, {"count": 3, "text": "authority"}, {"count": 3, "text": "today"}, {"count": 3, "text": "record"}, {"count": 3, "text": "site"}, {"count": 3, "text": "topic"}, {"count": 3, "text": "data"}, {"count": 3, "text": "time"}, {"count": 2, "text": "relationships"}, {"count": 2, "text": "erasure"}, {"count": 2, "text": "anticipated"}, {"count": 2, "text": "records"}, {"count": 2, "text": "affect"}, {"count": 2, "text": "library"}, {"count": 2, "text": "power"}, {"count": 2, "text": "musing"}, {"count": 2, "text": "rdf"}, {"count": 2, "text": "open"}, {"count": 2, "text": "guys"}, {"count": 2, "text": "hey"}, {"count": 2, "text": "basically"}, {"count": 2, "text": "handling"}, {"count": 2, "text": "work"}, {"count": 2, "text": "links"}, {"count": 2, "text": "chat"}], "name": "2015-10-22 21", "value": 29}], "metadata": {"search": "mashcat", "creator": "Christina Harlow", "title": "Mashcat October 22, 2015 - Authority Tweets"}};
+var values = data["values"];
+    
+// Encapsulate the word cloud functionality
+function wordCloud(selector) {
+
+    // get highest count, to serve as high of pointsize domain
+    var max = d3.max(d3.entries(values), function(d) {
+        return (d.value["words"].length > 0) ? d.value["words"][0]["count"] : 0;
+    });
+
+    // linear scale to convert counts to point sizes
+    var pointsize = d3.scale.log()
+        .domain([1, max])
+        .range([24, 60]);
+        
+    //Construct the word cloud's SVG element
+    var svg = d3.select(selector).append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g")
+        .attr("transform", "translate(" + Math.round(width/2) + "," + Math.round(height/2) + ")");
+
+// Add the timeslice label; the value is set on transition.
+var label = svg.append("text")
+    .attr("class", "label")
+    .attr("text-anchor", "start")
+    .attr("y", Math.round(height/2) * -1 +48)
+    .attr("x", Math.round(width/2) * -1 +24)
+    .text("");
+
+    //Draw the word cloud
+    function draw(words) {
+        // transition timing modelled on http://stackoverflow.com/questions/26421388/d3-js-subtransition-with-exit-and-enter
+        label.text(currentlabel);
+
+        var cloud = svg.selectAll("g text.word")
+                        .data(words, function(d) { return d.text; })
+        var transition=d3.transition().duration(2000);
+        
+        // remove exiting words 
+        if (!cloud.exit().empty()) 
+            transition = transition.each(function(){
+                cloud.exit()
+                    .transition()
+                        .duration(1000)
+                        .style("fill", "gray")
+                        .style('fill-opacity', 1e-6)
+                        .attr('font-size', 1)
+                        .remove();
+            }).transition();
+
+        // Resize and reposition updating words
+        if (!cloud.empty()) {
+
+            transition = transition.each(function(){
+                cloud
+                    .transition()
+                        .duration(1000)
+                        .style("fill", "black")
+                        .style("font-size", function(d) { return d.size + "px"; })
+                        .attr("transform", function(d) {
+                                return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                            })
+                        .style("fill-opacity", 1);
+            }).transition();
+        }
+        
+        //Entering words
+        if (!cloud.enter().empty()) 
+            transition=transition.each(function(){
+                cloud.enter()
+                    .append("text")
+                    .style("font-family", "Futura")
+                    .style("fill", "red")
+                    .attr("class", "word")
+                    .attr("text-anchor", "middle")
+                    .attr('font-size', 0)
+                    .text(function(d) { return d.text; })
+                        .attr("transform", function(d) {
+                                return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                            })
+                    .transition()
+                        .duration(1000)
+                        .style("font-size", function(d) { return d.size + "px"; })
+                        .style("fill-opacity", 1);
+            }).transition();
+
+    }
+
+
+    //Use the module pattern to encapsulate the visualisation code. We'll
+    // expose only the parts that need to be public.
+    return {
+
+        //Recompute the word cloud for a new set of words. This method will
+        // asycnhronously call draw when the layout has been computed.
+        //The outside world will need to call this function, so make it part
+        // of the wordCloud return value.
+        update: function(words) {
+            d3.layout.cloud().size([width, height])
+                .words(words)
+                .padding(5)
+                .rotate(20)
+                .font("Futura")
+                .fontSize(function(d) { return pointsize(d.size); })
+                .on("end", draw)
+                .start();
+        }
+    }
+
+}
+
+function getWords(words) {
+    return words.map(function(d) {
+        return {text: d.text, size: d.count};
+    })
+}
+
+//Create a new instance of the word cloud visualisation.
+var myWordCloud = wordCloud('body');
+
+//This method tells the word cloud to redraw with a new set of words.
+//In reality the new words would probably come from a server request,
+// user input or some other source.
+
+
+function showNewWords(x) {
+    value = values[x];
+    // TODO format label for different intervals
+    currentlabel = value.name + ":00 : " + value.value + " tweet" + ((value.value > 1) ? "s" : "");
+    myWordCloud.update(getWords(value["words"]));
+    if (x != values.length) {
+        setTimeout(function() { showNewWords(x + 1)}, 7000)
+    }
+}
+
+//Start cycling through the data
+showNewWords(0);
+
+
+
+</script>
+
+
